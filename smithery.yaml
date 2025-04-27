@@ -1,0 +1,39 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required: []
+    properties:
+      damengUser:
+        type: string
+        default: SYSDBA
+        description: Dameng database user
+      damengPassword:
+        type: string
+        default: SYSDBA
+        description: Dameng database password
+      damengHost:
+        type: string
+        default: localhost
+        description: Dameng database host
+      damengDatabase:
+        type: string
+        default: IDP_JH
+        description: Dameng database schema
+      damengPort:
+        type: number
+        default: 5236
+        description: Dameng database port
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'python', args: ['dameng/server.py'], env: { DAMENG_USER: config.damengUser, DAMENG_PASSWORD: config.damengPassword, DAMENG_HOST: config.damengHost, DAMENG_DATABASE: config.damengDatabase, DAMENG_PORT: String(config.damengPort) } })
+  exampleConfig:
+    damengUser: SYSDBA
+    damengPassword: SYSDBA
+    damengHost: localhost
+    damengDatabase: IDP_JH
+    damengPort: 5236
